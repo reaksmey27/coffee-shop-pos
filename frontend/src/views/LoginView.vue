@@ -41,7 +41,9 @@ const login = async () => {
       password: password.value,
     });
 
+    // RIGHT AFTER LOGIN SUCCESS
     localStorage.setItem("token", res.data.token);
+    localStorage.setItem("role", res.data.user.role);
 
     router.push("/");
   } catch (err) {

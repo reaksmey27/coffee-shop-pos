@@ -21,6 +21,7 @@ const routes = [
   {
     path: '/products',
     component: ProductsView,
+    meta: { role: "admin" }
   },
   {
     path: '/pos',
