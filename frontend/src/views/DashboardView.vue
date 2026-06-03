@@ -41,6 +41,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/services/api";
+import socket from "@/services/socket";
 import MainLayout from "@/layouts/MainLayout.vue";
 
 const stats = ref({
@@ -50,8 +51,18 @@ const stats = ref({
   completed: 0,
 });
 
-onMounted(async () => {
+// LOAD STATS FUNCTION
+const loadStats = async () => {
   const res = await api.get("/dashboard/stats");
   stats.value = res.data;
+};
+
+// 👇 PUT IT HERE (INSIDE SCRIPT SETUP)
+onMounted(async () => {
+  await loadStats();
+
+  socket.on("new-order", () => {
+    loadStats();
+  });
 });
 </script>

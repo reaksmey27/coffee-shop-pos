@@ -1,7 +1,6 @@
 const AppDataSource = require("../config/datasource");
 
-const orderRepo = () =>
-  AppDataSource.getRepository("Order");
+const orderRepo = () => AppDataSource.getRepository("Order");
 
 // CREATE ORDER
 exports.createOrder = async (req, res) => {
@@ -16,6 +15,8 @@ exports.createOrder = async (req, res) => {
     });
 
     await orderRepo().save(order);
+
+    global.io.emit("new-order", order);
 
     res.json({
       message: "Order created",

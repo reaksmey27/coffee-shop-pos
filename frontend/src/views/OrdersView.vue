@@ -39,20 +39,29 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/services/api";
+import socket from "@/services/socket";
 import MainLayout from "@/layouts/MainLayout.vue";
 
 const orders = ref([]);
 
+// LOAD ORDERS
 const loadOrders = async () => {
   const res = await api.get("/orders");
   orders.value = res.data;
 };
-
-onMounted(loadOrders);
 
 // UPDATE STATUS
 const update = async (id, status) => {
   await api.put(`/orders/${id}/status`, { status });
   loadOrders();
 };
+
+// 👇 REAL-TIME SOCKET GOES HERE
+onMounted(() => {
+  loadOrders();
+
+  socket.on("new-order", (order) => {
+    orders.value.unshift(order);
+  });
+});
 </script>
