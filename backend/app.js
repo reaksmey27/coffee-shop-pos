@@ -6,18 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Coffee Shop POS API Running",
-  });
-});
-
-app.get("/api/test", (req, res) => {
-  res.json({
-    success: true,
-    message: "Frontend connected to backend 🎉",
-  });
-});
+app.use("/api/auth", require("./src/routes/authRoutes"));
 
 module.exports = app;
