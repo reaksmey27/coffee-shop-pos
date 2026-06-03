@@ -13,4 +13,11 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Frontend connected to backend 🎉",
+  });
+});
+
 module.exports = app;
