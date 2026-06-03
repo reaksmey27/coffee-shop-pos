@@ -3,6 +3,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import POSView from '@/views/POSView.vue'
+import ReceiptsView from '@/views/ReceiptsView.vue'
 import { authGuard } from './guard'
 
 const routes = [
@@ -27,6 +28,10 @@ const routes = [
     path: '/pos',
     component: POSView,
   },
+  {
+    path: '/receipts/:id',
+    component: ReceiptsView,
+  }
 ]
 
 const router = createRouter({

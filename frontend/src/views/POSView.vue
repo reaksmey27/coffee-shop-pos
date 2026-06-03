@@ -51,6 +51,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 const products = ref([])
 const cart = ref([])
 const selectedTable = ref(null)
+const router = useRouter();
 
 // LOAD PRODUCTS
 onMounted(async () => {
@@ -96,12 +97,14 @@ const total = computed(() => {
 
 // CHECKOUT
 const checkout = async () => {
-  await api.post('/orders', {
+  const res = await api.post("/orders", {
     items: cart.value,
     totalAmount: total.value,
-  })
+    table: selectedTable.value,
+  });
 
-  cart.value = []
-  alert('Order created!')
-}
+  cart.value = [];
+
+  router.push(`/receipt/${res.data.order.id}`);
+};
 </script>
