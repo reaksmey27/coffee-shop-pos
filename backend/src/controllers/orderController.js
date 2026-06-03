@@ -7,6 +7,9 @@ exports.createOrder = async (req, res) => {
   try {
     const { items, totalAmount, table } = req.body;
 
+    const inventoryRepo = AppDataSource.getRepository("Inventory");
+
+    // 🧾 Create Order
     const order = orderRepo().create({
       totalAmount,
       status: "pending",
@@ -16,10 +19,29 @@ exports.createOrder = async (req, res) => {
 
     await orderRepo().save(order);
 
+    // 📦 Reduce Inventory Stock
+    for (const item of items) {
+      const inventoryItem = await inventoryRepo.findOne({
+        where: { name: item.name },
+      });
+
+      if (inventoryItem) {
+        inventoryItem.stock -= item.qty;
+
+        // prevent negative stock
+        if (inventoryItem.stock < 0) {
+          inventoryItem.stock = 0;
+        }
+
+        await inventoryRepo.save(inventoryItem);
+      }
+    }
+
+    // 📡 Real-time update
     global.io.emit("new-order", order);
 
     res.json({
-      message: "Order created",
+      message: "Order created successfully",
       order,
     });
   } catch (err) {

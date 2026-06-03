@@ -18,6 +18,7 @@ const AppDataSource = new DataSource({
     require("../entities/Order"),
     require("../entities/OrderItem"),
     require("../entities/Table"),
+    require("../entities/Inventory"),
   ],
 });
 

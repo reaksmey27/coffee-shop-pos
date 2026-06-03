@@ -11,5 +11,7 @@ app.use("/api/products", require("./src/routes/productRoutes"));
 app.use("/api/orders", require("./src/routes/orderRoutes"));
 app.use("/api/tables", require("./src/routes/tableRoutes"));
 app.use("/api/dashboard", require("./src/routes/dashboardRoutes"));
+app.use("/api/inventory", require("./src/routes/inventoryRoutes"));
+
 
 module.exports = app;
