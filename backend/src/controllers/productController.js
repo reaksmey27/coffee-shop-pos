@@ -1,30 +1,129 @@
+const { Like } = require("typeorm");
 const AppDataSource = require("../config/datasource");
 
 const productRepo = () =>
   AppDataSource.getRepository("Product");
 
-// GET ALL
-exports.getAll = async (req, res) => {
-  const products = await productRepo().find();
-  res.json(products);
+// GET ALL PRODUCTS + SEARCH
+exports.getProducts = async (req, res) => {
+  try {
+    const search = req.query.search || "";
+
+    const products = await productRepo().find({
+      where: {
+        name: Like(`%${search}%`),
+      },
+      relations: ["category"],
+      order: {
+        id: "DESC",
+      },
+    });
+
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
-// CREATE
-exports.create = async (req, res) => {
-  const product = productRepo().create(req.body);
-  await productRepo().save(product);
+// GET SINGLE PRODUCT
+exports.getProduct = async (req, res) => {
+  try {
+    const product = await productRepo().findOne({
+      where: {
+        id: req.params.id,
+      },
+      relations: ["category"],
+    });
 
-  res.json(product);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
-// UPDATE
-exports.update = async (req, res) => {
-  await productRepo().update(req.params.id, req.body);
-  res.json({ message: "Updated" });
+// CREATE PRODUCT
+exports.createProduct = async (req, res) => {
+  try {
+    const product = productRepo().create(req.body);
+
+    await productRepo().save(product);
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
-// DELETE
-exports.remove = async (req, res) => {
-  await productRepo().delete(req.params.id);
-  res.json({ message: "Deleted" });
+// UPDATE PRODUCT
+exports.updateProduct = async (req, res) => {
+  try {
+    const product = await productRepo().findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    productRepo().merge(product, req.body);
+
+    await productRepo().save(product);
+
+    res.json({
+      message: "Product updated successfully",
+      product,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// DELETE PRODUCT
+exports.deleteProduct = async (req, res) => {
+  try {
+    const product = await productRepo().findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    await productRepo().remove(product);
+
+    res.json({
+      message: "Product deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };

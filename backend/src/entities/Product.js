@@ -15,6 +15,11 @@ module.exports = new EntitySchema({
       type: "varchar",
     },
 
+    sku: {
+      type: "varchar",
+      unique: true,
+    },
+
     price: {
       type: "decimal",
       precision: 10,

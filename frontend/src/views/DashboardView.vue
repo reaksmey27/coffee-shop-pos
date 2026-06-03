@@ -2,35 +2,37 @@
   <MainLayout>
 
     <h1 class="text-2xl font-bold mb-6">
-      Dashboard Overview
+      📊 Dashboard
     </h1>
 
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-      <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Total Orders</p>
-        <p class="text-2xl font-bold">{{ stats.totalOrders }}</p>
-      </div>
-
-      <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Total Sales</p>
-        <p class="text-2xl font-bold">
+      <div class="bg-white p-4 shadow rounded">
+        <p>Total Sales</p>
+        <h2 class="text-2xl font-bold">
           ${{ stats.totalSales }}
-        </p>
+        </h2>
       </div>
 
-      <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Pending</p>
-        <p class="text-2xl font-bold text-yellow-500">
+      <div class="bg-white p-4 shadow rounded">
+        <p>Total Orders</p>
+        <h2 class="text-2xl font-bold">
+          {{ stats.totalOrders }}
+        </h2>
+      </div>
+
+      <div class="bg-yellow-100 p-4 shadow rounded">
+        <p>Pending</p>
+        <h2 class="text-2xl font-bold">
           {{ stats.pending }}
-        </p>
+        </h2>
       </div>
 
-      <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Completed</p>
-        <p class="text-2xl font-bold text-green-500">
+      <div class="bg-green-100 p-4 shadow rounded">
+        <p>Completed</p>
+        <h2 class="text-2xl font-bold">
           {{ stats.completed }}
-        </p>
+        </h2>
       </div>
 
     </div>
@@ -41,28 +43,21 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/services/api";
-import socket from "@/services/socket";
 import MainLayout from "@/layouts/MainLayout.vue";
 
 const stats = ref({
-  totalOrders: 0,
   totalSales: 0,
+  totalOrders: 0,
   pending: 0,
   completed: 0,
 });
 
-// LOAD STATS FUNCTION
 const loadStats = async () => {
-  const res = await api.get("/dashboard/stats");
+  const res = await api.get("/reports/sales");
   stats.value = res.data;
 };
 
-// 👇 PUT IT HERE (INSIDE SCRIPT SETUP)
-onMounted(async () => {
-  await loadStats();
-
-  socket.on("new-order", () => {
-    loadStats();
-  });
+onMounted(() => {
+  loadStats();
 });
 </script>

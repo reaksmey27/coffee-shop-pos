@@ -3,7 +3,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import POSView from '@/views/POSView.vue'
-import ReceiptsView from '@/views/ReceiptsView.vue'
+import ReceiptView from '@/views/ReceiptView.vue'
 import { authGuard } from './guard'
 
 const routes = [
@@ -29,8 +29,8 @@ const routes = [
     component: POSView,
   },
   {
-    path: '/receipts/:id',
-    component: ReceiptsView,
+    path: '/receipt/:id',
+    component: ReceiptView,
   }
 ]
 
