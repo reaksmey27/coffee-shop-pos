@@ -30,5 +30,12 @@ module.exports = new EntitySchema({
       inverseSide: "order",
       cascade: true,
     },
+
+    table: {
+      type: "many-to-one",
+      target: "Table",
+      joinColumn: true,
+      nullable: true,
+    },
   },
 });
