@@ -23,6 +23,11 @@ module.exports = new EntitySchema({
     },
   },
 
+  status: {
+    type: "varchar",
+    default: "pending", // pending | preparing | ready | completed
+  },
+
   relations: {
     items: {
       type: "one-to-many",

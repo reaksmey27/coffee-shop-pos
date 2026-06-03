@@ -6,10 +6,12 @@ const orderRepo = () =>
 // CREATE ORDER
 exports.createOrder = async (req, res) => {
   try {
-    const { items, totalAmount } = req.body;
+    const { items, totalAmount, table } = req.body;
 
     const order = orderRepo().create({
       totalAmount,
+      status: "pending",
+      table,
       items,
     });
 
@@ -31,4 +33,15 @@ exports.getOrders = async (req, res) => {
   });
 
   res.json(orders);
+};
+
+// UPDATE ORDER STATUS
+exports.updateStatus = async (req, res) => {
+  const { status } = req.body;
+
+  await orderRepo().update(req.params.id, { status });
+
+  res.json({
+    message: "Status updated",
+  });
 };
