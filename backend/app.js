@@ -8,5 +8,6 @@ app.use(express.json());
 
 app.use("/api/auth", require("./src/routes/authRoutes"));
 app.use("/api/products", require("./src/routes/productRoutes"));
+app.use("/api/orders", require("./src/routes/orderRoutes"));
 
 module.exports = app;

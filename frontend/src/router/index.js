@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ProductsView from '@/views/ProductsView.vue'
+import POSView from '@/views/POSView.vue'
 import { authGuard } from './guard'
 
 const routes = [
@@ -20,6 +21,10 @@ const routes = [
   {
     path: '/products',
     component: ProductsView,
+  },
+  {
+    path: '/pos',
+    component: POSView,
   },
 ]
 
